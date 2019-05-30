@@ -32,7 +32,6 @@ class Logger implements LoggerInterface
         $levelStr = $this->levelMap($logLevel);
         $temp =  $this->colorString("[{$date}][{$category}][{$levelStr}] : [{$msg}]",$logLevel)."\n";
         fwrite(STDOUT,$temp);
-        $this->log($msg,$logLevel,$category);
     }
 
     private function colorString(string $str,int $logLevel)
