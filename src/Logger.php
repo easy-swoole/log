@@ -21,8 +21,8 @@ class Logger implements LoggerInterface
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
         $filePath = $this->logDir."/log.log";
-        $str = "[{$date}][{$category}][{$levelStr}] : [{$msg}]\r\n";
-        file_put_contents($filePath,"{$str}\n",FILE_APPEND|LOCK_EX);
+        $str = "[{$date}][{$category}][{$levelStr}] : [{$msg}]\n";
+        file_put_contents($filePath,"{$str}",FILE_APPEND|LOCK_EX);
         return $str;
     }
 
@@ -30,7 +30,8 @@ class Logger implements LoggerInterface
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        echo $this->colorString("[{$date}][{$category}][{$levelStr}]",$logLevel)." : [{$msg}]\r\n";
+        $temp =  $this->colorString("[{$date}][{$category}][{$levelStr}] : [{$msg}]",$logLevel)."\n";
+        fwrite(STDOUT,$temp);
         $this->log($msg,$logLevel,$category);
     }
 
