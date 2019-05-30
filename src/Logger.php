@@ -16,7 +16,7 @@ class Logger implements LoggerInterface
         $this->logDir = $logDir;
     }
 
-    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG')
+    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG'):string
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
