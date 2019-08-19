@@ -16,17 +16,17 @@ class Logger implements LoggerInterface
         $this->logDir = $logDir;
     }
 
-    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG'):string
+    function log(?string $msg,string $filename = 'log',int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG'):string
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $filePath = $this->logDir."/log.log";
+        $filePath = $this->logDir."/$filename.log";
         $str = "[{$date}][{$category}][{$levelStr}] : [{$msg}]\n";
         file_put_contents($filePath,"{$str}",FILE_APPEND|LOCK_EX);
         return $str;
     }
 
-    function console(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG')
+    function console(?string $msg,string $filename = 'log',int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG')
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
