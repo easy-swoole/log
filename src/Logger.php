@@ -8,6 +8,19 @@ class Logger implements LoggerInterface
 {
     private $logDir;
 
+    private $colorMap = [
+        self::LOG_LEVEL_NOTICE => '[43m',
+        self::LOG_LEVEL_WARNING => '[45m',
+        self::LOG_LEVEL_ERROR => '[41m',
+        self::LOG_LEVEL_INFO => '[42m',
+    ];
+
+    public function setColorMap(array $map):LoggerInterface
+    {
+        $this->colorMap = $map;
+        return $this;
+    }
+
     function __construct(string $logDir = null)
     {
         if(empty($logDir)){
@@ -20,7 +33,7 @@ class Logger implements LoggerInterface
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $filePath = $this->logDir."/log.log";
+        $filePath = $this->logDir."/log_{$category}.log";
         $str = "[{$date}][{$category}][{$levelStr}] : [{$msg}]\n";
         file_put_contents($filePath,"{$str}",FILE_APPEND|LOCK_EX);
         return $str;
@@ -30,31 +43,20 @@ class Logger implements LoggerInterface
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $temp =  $this->colorString("[{$date}][{$category}][{$levelStr}] : [{$msg}]",$logLevel)."\n";
+        $temp =  $this->colorString("[{$date}][{$category}][{$levelStr}] : ",$logLevel)."[{$msg}]\n";
         fwrite(STDOUT,$temp);
     }
 
     private function colorString(string $str,int $logLevel)
     {
-        switch($logLevel) {
-            case self::LOG_LEVEL_INFO:
-                $out = "[42m";
-                break;
-            case self::LOG_LEVEL_NOTICE:
-                $out = "[43m";
-                break;
-            case self::LOG_LEVEL_WARNING:
-                $out = "[45m";
-                break;
-            case self::LOG_LEVEL_ERROR:
-                $out = "[41m";
-                break;
-            default:
-                $out = "[42m";
-                break;
+        if(isset($this->colorMap[$logLevel])){
+            $out = $this->colorMap[$logLevel];
+        }else{
+            $out = $this->colorMap[self::LOG_LEVEL_INFO];
         }
         return chr(27) . "$out" . "{$str}" . chr(27) . "[0m";
     }
+
 
     private function levelMap(int $level)
     {
