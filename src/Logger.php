@@ -8,19 +8,6 @@ class Logger implements LoggerInterface
 {
     private $logDir;
 
-    private $colorMap = [
-        self::LOG_LEVEL_NOTICE => '[43m',
-        self::LOG_LEVEL_WARNING => '[45m',
-        self::LOG_LEVEL_ERROR => '[41m',
-        self::LOG_LEVEL_INFO => '[42m',
-    ];
-
-    public function setColorMap(array $map):LoggerInterface
-    {
-        $this->colorMap = $map;
-        return $this;
-    }
-
     function __construct(string $logDir = null)
     {
         if(empty($logDir)){
@@ -29,7 +16,7 @@ class Logger implements LoggerInterface
         $this->logDir = $logDir;
     }
 
-    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG'):string
+    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'debug'):string
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
@@ -39,39 +26,28 @@ class Logger implements LoggerInterface
         return $str;
     }
 
-    function console(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'DEBUG')
+    function console(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'console')
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $temp =  $this->colorString("[{$date}][{$category}][{$levelStr}] : ",$logLevel)."[{$msg}]\n";
+        $temp = "[{$date}][{$category}][{$levelStr}]:[{$msg}]\n";
         fwrite(STDOUT,$temp);
     }
-
-    private function colorString(string $str,int $logLevel)
-    {
-        if(isset($this->colorMap[$logLevel])){
-            $out = $this->colorMap[$logLevel];
-        }else{
-            $out = $this->colorMap[self::LOG_LEVEL_INFO];
-        }
-        return chr(27) . "$out" . "{$str}" . chr(27) . "[0m";
-    }
-
 
     private function levelMap(int $level)
     {
         switch ($level)
         {
             case self::LOG_LEVEL_INFO:
-               return 'INFO';
+               return 'info';
             case self::LOG_LEVEL_NOTICE:
-                return 'NOTICE';
+                return 'notice';
             case self::LOG_LEVEL_WARNING:
-                return 'WARNING';
+                return 'warning';
             case self::LOG_LEVEL_ERROR:
-                return 'ERROR';
+                return 'error';
             default:
-                return 'UNKNOWN';
+                return 'unknown';
         }
     }
 }
