@@ -11,6 +11,6 @@ interface LoggerInterface
     const LOG_LEVEL_WARNING = 3;
     const LOG_LEVEL_ERROR = 4;
 
-    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'debug'):string ;
+    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'debug');
     function console(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'console');
 }

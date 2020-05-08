@@ -16,12 +16,13 @@ class Logger implements LoggerInterface
         $this->logDir = $logDir;
     }
 
-    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'debug'):string
+    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'debug')
     {
+        $prefix = date('Ym');
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $filePath = $this->logDir."/log_{$category}.log";
-        $str = "[{$date}][{$category}][{$levelStr}] : [{$msg}]\n";
+        $filePath = $this->logDir."/log_{$prefix}.log";
+        $str = "[{$date}][{$category}][{$levelStr}]:[{$msg}]\n";
         file_put_contents($filePath,"{$str}",FILE_APPEND|LOCK_EX);
         return $str;
     }
@@ -30,8 +31,7 @@ class Logger implements LoggerInterface
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $temp = "[{$date}][{$category}][{$levelStr}]:[{$msg}]\n";
-        fwrite(STDOUT,$temp);
+        echo "[{$date}][{$category}][{$levelStr}]:[{$msg}]\n";
     }
 
     private function levelMap(int $level)
