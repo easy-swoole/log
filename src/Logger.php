@@ -16,7 +16,7 @@ class Logger implements LoggerInterface
         $this->logDir = $logDir;
     }
 
-    function log(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'debug')
+    function log(?string $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
     {
         $prefix = date('Ym');
         $date = date('Y-m-d H:i:s');
@@ -27,7 +27,7 @@ class Logger implements LoggerInterface
         return $str;
     }
 
-    function console(?string $msg,int $logLevel = self::LOG_LEVEL_INFO,string $category = 'console')
+    function console(?string $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
@@ -38,6 +38,8 @@ class Logger implements LoggerInterface
     {
         switch ($level)
         {
+            case self::LOG_LEVEL_DEBUG:
+                return 'debug';
             case self::LOG_LEVEL_INFO:
                return 'info';
             case self::LOG_LEVEL_NOTICE:
