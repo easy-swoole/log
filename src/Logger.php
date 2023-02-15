@@ -7,22 +7,30 @@ namespace EasySwoole\Log;
 class Logger implements LoggerInterface
 {
     private $logDir;
+    private $prefix = '';
 
-    function __construct(string $logDir = null)
+    function __construct(string $logDir = null,?string $prefix = null)
     {
         if(empty($logDir)){
             $logDir = getcwd();
+        }
+        if(!empty($prefix)){
+            $this->prefix = $prefix;
         }
         $this->logDir = $logDir;
     }
 
     function log(?string $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
     {
-        $prefix = date('Ym');
-        $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $filePath = $this->logDir."/log_{$prefix}.log";
-        $str = "[{$date}][{$category}][{$levelStr}]:[{$msg}]\n";
+        $date = date('Ym');
+        if(!empty($this->logDir)){
+            $filePath = $this->logDir."/log_{$this->prefix}_{$date}.log";
+        }else{
+            $filePath = $this->logDir."/log_{$date}.log";
+        }
+        $time = date('Y-m-d H:i:s');
+        $str = "[{$time}][{$category}][{$levelStr}]:[{$msg}]\n";
         file_put_contents($filePath,"{$str}",FILE_APPEND|LOCK_EX);
         return $str;
     }
