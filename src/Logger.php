@@ -24,7 +24,7 @@ class Logger implements LoggerInterface
     {
         $levelStr = $this->levelMap($logLevel);
         $date = date('Ym');
-        if(!empty($this->logDir)){
+        if(!empty($this->prefix)){
             $filePath = $this->logDir."/{$this->prefix}.log_{$date}.log";
         }else{
             $filePath = $this->logDir."/log_{$date}.log";
