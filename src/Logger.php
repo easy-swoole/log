@@ -9,7 +9,7 @@ class Logger implements LoggerInterface
     private $logDir;
     private $prefix = '';
 
-    function __construct(string $logDir = null,?string $prefix = null)
+    function __construct(string|null $logDir = null,string|null $prefix = null)
     {
         if(empty($logDir)){
             $logDir = getcwd();
@@ -20,7 +20,7 @@ class Logger implements LoggerInterface
         $this->logDir = $logDir;
     }
 
-    function log(?string $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
+    function log(string|null $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
     {
         $levelStr = $this->levelMap($logLevel);
         $date = date('Ym');
@@ -35,7 +35,7 @@ class Logger implements LoggerInterface
         return $str;
     }
 
-    function console(?string $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
+    function console(string|null $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
     {
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
